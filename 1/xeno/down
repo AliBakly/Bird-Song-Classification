@@ -1,0 +1,19 @@
+import json
+import pandas as pd
+
+# Get the json entries from your downloaded json
+jsonFile = open('/Users/tessa/Documents/noca-query.json', 'r')
+values = json.load(jsonFile)
+jsonFile.close()
+
+# Create a pandas dataframe of records & convert to .csv file
+record_df = pd.DataFrame(values['recordings'])
+record_df.to_csv('xc-noca.csv', index=False)
+
+# Make wget input file
+url_list = []
+for file in record_df['file'].tolist():
+    url_list.append('https:{}'.format(file))
+with open('xc-noca-urls.txt', 'w+') as f:
+    for item in url_list:
+        f.write("{}\n".format(item))
